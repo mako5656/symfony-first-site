@@ -5,8 +5,18 @@
 
 # website-skeletonプロジェクト作成
 
+Webアプリケーションのフルセット
+
 ```
 composer create-project symfony/website-skeleton my-symfony-app
+```
+
+# skeletonプロジェクト作成
+
+必要最低限のアプリケーションプロジェクト
+
+```
+composer create-project symfony/skeleton my-symfony-app
 ```
 
 # プロジェクト実行
