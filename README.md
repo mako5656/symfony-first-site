@@ -1,7 +1,7 @@
 # 開発環境
 
 - PHP：8.1.8
-- symfony：5.4.12
+- symfony：6.1.4
 
 # website-skeletonプロジェクト作成
 
