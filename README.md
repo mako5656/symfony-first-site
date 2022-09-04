@@ -24,3 +24,9 @@ composer create-project symfony/skeleton my-symfony-app
 ```
 symfony server:start
 ```
+
+# コントローラーの作成
+
+```
+php bin/console make:controller
+```
