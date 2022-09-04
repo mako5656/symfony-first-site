@@ -1,3 +1,7 @@
 controllers:
-    resource: ../src/Controller/
-    type: attribute
+  resource: ../src/Controller/
+  type: attribute
+
+hello:
+  path: /hello
+  controller: App\Controller\HelloController::index
