@@ -30,3 +30,9 @@ symfony server:start
 ```
 php bin/console make:controller
 ```
+
+# ログ出力場所
+
+```
+/var/log/dev.log
+```
