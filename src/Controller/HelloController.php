@@ -12,13 +12,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class HelloController extends AbstractController
 {
     #[Route('/hello', name:'hello')]
-    public function index(Request $request, LoggerInterface $logger)
+    public function index()
     {
-        $data = array(
-            'name'=>array('first'=>'Taro','second'=>'Yamada'),
-            'age'=>36, 'mail'=>'taro@yamada.kun'
-        );
-        $logger->info(serialize($data));
-        return new JsonResponse($data);
+        return $this->render('hello/index.html.twig', [
+            'controller_name' => 'HelloController',
+        ]);
     }
 }
