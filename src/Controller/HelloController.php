@@ -12,23 +12,26 @@ use Symfony\Component\Routing\Annotation\Route;
 class HelloController extends AbstractController
 {
     #[Route('/hello', name:'hello')]
-    public function index($msg='Hello!')
+    public function index(Request $request)
     {
         return $this->render('hello/index.html.twig', [
-            'controller' => 'HelloController',
-            'action' => 'index',
-            'prev_action' => '(none)',
-            'message' => $msg,
+            'title' => 'Hello',
+            'message' => 'あなたのお名前：',
         ]);
     }
 
-    #[Route('/other/{action}/{msg}', name:'other')]
-    public function other($action, $msg)
+    #[Route('/other', name:'other')]
+    public function other(Request $request)
     {
+        /**
+         * $request->request がPOST送信された値を扱うオブジェクト
+         * requestにせっていされたオブジェクトのgetメソッドを使って送信フォームの値を取り出す
+         * 引数には、フォームのname属性を指定
+        */
+        $input = $request->request->get('input');
+        $msg = 'こんにちは、' . $input . 'さん！';
         return $this->render('hello/index.html.twig', [
-            'controller' => 'HelloController',
-            'action' => 'other',
-            'prev_action' => $action,
+            'title' => 'Hello',
             'message' => $msg,
         ]);
     }
