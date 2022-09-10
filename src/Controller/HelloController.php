@@ -2,27 +2,37 @@
 
 namespace App\Controller;
 
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
+
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class HelloController extends AbstractController
 {
     #[Route('/hello', name:'hello')]
     public function index(Request $request)
     {
+        $form = $this->createFormBuilder()
+            ->add('input', TextType::class)
+            ->add('save', SubmitType::class, ['label' => 'Click'])
+            ->getForm();
+
         if ($request->getMethod() == 'POST'){
-            $input = $request->request->get('input');
-            $msg = 'こんにちは、' . $input . 'さん！';
+            /**
+             * handleRequestはFormInterfaceにあるメソッド
+             * 引数に指定されたRequestからフォーム関連の情報を取り出しFormInterfaceにaddされたフィールドに設定する働きがある
+             */
+            $form->handleRequest($request);
+            $msg = 'こんにちは、' . $form->get('input')->getData() . 'さん！';
         } else {
-            $msg = 'お名前は？';
+            $msg = 'お名前をどうぞ！';
         }
         return $this->render('hello/index.html.twig', [
             'title' => 'Hello',
             'message' => $msg,
+            'form' => $form->createView(),
         ]);
     }
 }
