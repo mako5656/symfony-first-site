@@ -1,12 +1,9 @@
 {% block body %}
-{% set price = 12300 %}
-{% with %}
-    {% set price = 1000 %}
-    <p>金額：{{price}}円</p>
-    {% set taxprice = price * 1.08 %}
-    <p>税込：{{taxprice}}円</p>
-{% endwith %}
-<p>金額：{{price}}円</p>
-{% set taxprice = price * 1.08 %}
-<p>税込：{{taxprice}}円</p>
+{% set flg = true %}
+{% set message = 'This is sample message.' %}
+{% if flg %}
+    <p>{{message}}</p>
+{% else %}
+    <p>（※メッセージは非表示）</p>
+{% endif %}
 {% endblock %}
