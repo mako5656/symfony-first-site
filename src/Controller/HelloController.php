@@ -13,8 +13,8 @@ class HelloController extends AbstractController
     public function index(Request $request)
     {
         return $this->render('hello/index.html.twig', [
-           'title' => 'Hello',
-           'message' => 'これはサンプルのテンプレート画面です。',
-       ]);
+            'title' => 'Hello',
+            'message' => 'これはサンプルのテンプレート画面です。',
+        ]);
     }
 }
