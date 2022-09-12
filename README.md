@@ -37,6 +37,12 @@ php bin/console make:controller
 php bin/console make:entity
 ```
 
+# マイグレーションファイルの作成
+
+```
+php bin/console make:migration
+```
+
 # ログ出力場所
 
 ```
