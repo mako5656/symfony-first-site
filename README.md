@@ -43,6 +43,12 @@ php bin/console make:entity
 php bin/console make:migration
 ```
 
+# マイグレーションの適用
+
+```
+php bin/console doctrine:migrations:migrate
+```
+
 # ログ出力場所
 
 ```
