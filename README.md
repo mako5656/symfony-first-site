@@ -31,6 +31,12 @@ symfony server:start
 php bin/console make:controller
 ```
 
+# エンティティの作成
+
+```
+php bin/console make:entity
+```
+
 # ログ出力場所
 
 ```
