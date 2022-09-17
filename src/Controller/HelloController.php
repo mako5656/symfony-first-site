@@ -8,17 +8,59 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
+use Doctrine\ORM\EntityManagerInterface;
+
 class HelloController extends AbstractController
 {
     #[Route('/hello', name:'hello')]
-    public function index(Request $request)
+    public function index(Request $request, EntityManagerInterface $em)
     {
-        $repository = $this->getDoctrine()
-            ->getRepository(Person::class);
+        $repository = $em->getRepository(Person::class);
         $data = $repository->findall();
         return $this->render('hello/index.html.twig', [
             'title' => 'Hello',
             'data' => $data,
         ]);
+    }
+
+    #[Route('/find', name:'find')]
+    public function find(Request $request, EntityManagerInterface $em)
+    {
+        $formobj = new FindForm();
+        $form = $this->createFormBuilder($formobj)
+            ->add('find', TextType::class)
+            ->add('save', SubmitType::class, array('label' => 'Click'))
+            ->getForm();
+
+        if ($request->getMethod() == 'POST'){
+            $form->handleRequest($request);
+            $findstr = $form->getData()->getFind();
+            $repository = $em->getRepository(Person::class);
+            $result = $repository->find($findstr);
+        } else {
+            $result = null;
+        }
+        return $this->render('hello/find.html.twig', [
+            'title' => 'Hello',
+            'form' => $form->createView(),
+            'data' => $result,
+        ]);
+    }
+}
+
+class FindForm
+{
+    private $find;
+
+    public function getFind()
+    {
+        return $this->find;
+    }
+    public function setFind($find)
+    {
+        $this->find = $find;
     }
 }
