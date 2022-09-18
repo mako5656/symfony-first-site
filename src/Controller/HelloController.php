@@ -14,6 +14,9 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 use Doctrine\ORM\EntityManagerInterface;
 
+use App\Form\PersonType;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+
 class HelloController extends AbstractController
 {
     #[Route('/hello', name:'hello')]
@@ -40,15 +43,10 @@ class HelloController extends AbstractController
     public function create(Request $request, EntityManagerInterface $em)
     {
         $person = new Person();
-        $form = $this->createFormBuilder($person)
-            ->add('name', TextType::class)
-            ->add('mail', TextType::class)
-            ->add('age', IntegerType::class)
-            ->add('save', SubmitType::class, array('label' => 'Click'))
-            ->getForm();
+        $form = $this->createForm(PersonType::class, $person);
+        $form->handleRequest($request);
 
         if ($request->getMethod() == 'POST'){
-            $form->handleRequest($request);
             $person = $form->getData();
             $manager = $em;
             $manager->persist($person);
