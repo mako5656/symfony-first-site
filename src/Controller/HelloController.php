@@ -39,12 +39,15 @@ class HelloController extends AbstractController
             ->add('save', SubmitType::class, array('label' => 'Click'))
             ->getForm();
 
-            $repository = $em->getRepository(Person::class);
+        $repository = $em->getRepository(Person::class);
+
+        $manager = $em;
 
         if ($request->getMethod() == 'POST'){
             $form->handleRequest($request);
             $findstr = $form->getData()->getFind();
-            $result = $repository->findByNameOrMail($findstr);
+            $query = $manager->createQuery("SELECT p FROM App\Entity\Person p WHERE p.name = '{$findstr}'");
+            $result = $query->getResult();
         } else {
             $result = $repository->findAllwithSort();
         }
