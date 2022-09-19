@@ -61,6 +61,17 @@ class PersonRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findByNameOrMail($value)
+    {
+        $builder = $this->createQueryBuilder('p');
+        return $builder
+            ->where($builder->expr()->like('p.name', '?1'))
+            ->orWhere($builder->expr()->like('p.mail', '?2'))
+            ->setParameters(array(1 => '%' . $value . '%', 2 => '%' . $value . '%'))
+            ->getQuery()
+            ->getResult();
+    }
+
 
 //    /**
 //     * @return Person[] Returns an array of Person objects
