@@ -39,13 +39,14 @@ class HelloController extends AbstractController
             ->add('save', SubmitType::class, array('label' => 'Click'))
             ->getForm();
 
+            $repository = $em->getRepository(Person::class);
+
         if ($request->getMethod() == 'POST'){
             $form->handleRequest($request);
             $findstr = $form->getData()->getFind();
-            $repository = $em->getRepository(Person::class);
             $result = $repository->findByNameOrMail($findstr);
         } else {
-            $result = null;
+            $result = $repository->findAllwithSort();
         }
         return $this->render('hello/find.html.twig', [
             'title' => 'Hello',
