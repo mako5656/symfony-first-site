@@ -43,7 +43,7 @@ class HelloController extends AbstractController
             $form->handleRequest($request);
             $findstr = $form->getData()->getFind();
             $repository = $em->getRepository(Person::class);
-            $result = $repository->findByAge($findstr);
+            $result = $repository->findByName($findstr);
         } else {
             $result = null;
         }
