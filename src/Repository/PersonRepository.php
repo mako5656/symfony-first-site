@@ -39,6 +39,15 @@ class PersonRepository extends ServiceEntityRepository
         }
     }
 
+    public function findByName($value)
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.name = ?1')
+            ->setParameter(1, $value)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Person[] Returns an array of Person objects
 //     */
