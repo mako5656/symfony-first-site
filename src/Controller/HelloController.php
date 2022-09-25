@@ -19,6 +19,8 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+
 class HelloController extends AbstractController
 {
     #[Route('/hello', name:'hello')]
@@ -68,7 +70,7 @@ class HelloController extends AbstractController
     }
 
     #[Route('/create', name:'create')]
-    public function create(Request $request, EntityManagerInterface $em)
+    public function create(Request $request, ValidatorInterface $validator, EntityManagerInterface $em)
     {
         $person = new Person();
         $form = $this->createForm(PersonType::class, $person);
@@ -76,10 +78,21 @@ class HelloController extends AbstractController
 
         if ($request->getMethod() == 'POST'){
             $person = $form->getData();
-            $manager = $em;
-            $manager->persist($person);
-            $manager->flush();
-            return $this->redirect('/hello');
+
+            $errors = $validator->validate($person);
+
+            if (count($errors) == 0) {
+                $manager = $em;
+                $manager->persist($person);
+                $manager->flush();
+                return $this->redirect('/hello');
+            } else {
+                return $this->render('hello/create.html.twig', [
+                    'title' => 'Hello',
+                    'message' => 'ERROR!',
+                    'form' => $form->createView(),
+                ]);
+            }
         } else {
             return $this->render('hello/create.html.twig', [
                 'title' => 'Hello',
