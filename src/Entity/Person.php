@@ -16,17 +16,17 @@ class Person
     private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Assert\NotBlank()]
+    #[Assert\NotBlank(message: "必ず値を入力して下さい。")]
     private ?string $name = null;
 
     #[ORM\Column(type: 'string',length: 255, nullable: true)]
-    #[Assert\Email]
-    #[Assert\NotBlank]
+    #[Assert\Email(message: "メールアドレスを入力して下さい。")]
+    #[Assert\NotBlank(message: "必ず値を入力して下さい。")]
     private ?string $mail = null;
 
     #[ORM\Column(type:'integer', nullable: true)]
     #[Assert\Type(type: 'integer')]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: "必ず値を入力して下さい。")]
     private ?int $age = null;
 
     public function getId(): ?int
