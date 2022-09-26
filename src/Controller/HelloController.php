@@ -21,6 +21,8 @@ use Doctrine\ORM\Query\ResultSetMappingBuilder;
 
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 class HelloController extends AbstractController
 {
     #[Route('/hello', name:'hello')]
@@ -72,34 +74,36 @@ class HelloController extends AbstractController
     #[Route('/create', name:'create')]
     public function create(Request $request, ValidatorInterface $validator, EntityManagerInterface $em)
     {
-        $person = new Person();
-        $form = $this->createForm(PersonType::class, $person);
-        $form->handleRequest($request);
+        $form = $this->createFormBuilder()
+            ->add('name', TextType::class,
+                array(
+                    'required' => true,
+                    'constraints' => [
+                        new Assert\Length(array(
+                            'min' => 3, 'max' => 10,
+                            'minMessage' => '３文字以上必要です。',
+                            'maxMessage' => '10文字以内にして下さい。'))
+                    ]
+                )
+            )
+            ->add('save', SubmitType::class, array('label' => 'Click'))
+            ->getForm();
 
         if ($request->getMethod() == 'POST'){
-            $person = $form->getData();
-
-            $errors = $validator->validate($person);
-
-            if (count($errors) == 0) {
-                $manager = $em;
-                $manager->persist($person);
-                $manager->flush();
-                return $this->redirect('/hello');
+            $form->handleRequest($request);
+            if ($form->isValid()){
+                $msg = 'Hello, ' . $form->get('name')->getData() . '!';
             } else {
-                return $this->render('hello/create.html.twig', [
-                    'title' => 'Hello',
-                    'message' => 'ERROR!',
-                    'form' => $form->createView(),
-                ]);
+                $msg = 'ERROR!';
             }
         } else {
-            return $this->render('hello/create.html.twig', [
-                'title' => 'Hello',
-                'message' => 'Create Entity',
-                'form' => $form->createView(),
-            ]);
+            $msg = 'Send Form';
         }
+        return $this->render('hello/create.html.twig', [
+            'title' => 'Hello',
+            'message' => $msg,
+            'form' => $form->createView(),
+        ]);
     }
 
     #[Route('/update/{id}', name:'update')]
