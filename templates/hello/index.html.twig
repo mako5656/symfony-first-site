@@ -4,27 +4,11 @@
 {% block title %}{{title}}{% endblock %}
 
 {% block body %}
-    <h2>Person table</h2>
-    <table>
-        <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Mail</th>
-            <th>Age</th>
-            <th>Messages</th>
-        </tr>
-        {% for item in data %}
-            <tr>
-                <td>{{item.id}}</td>
-                <td>{{item.name}}</td>
-                <td>{{item.mail}}</td>
-                <td>{{item.age}}</td>
-                <td><ul>
-                {% for msg in item.messages %}
-                <li>{{msg.content}}</li>
-                {% endfor %}
-                </ul></td>
-            </tr>
+    <h2>Hello</h2>
+    <p>{{ message }}</p>
+    <ul>
+        {% for file in finder %}
+            <li>{{file.filename}}</li>
         {% endfor %}
-    </table>
+    </ul>
 {% endblock %}

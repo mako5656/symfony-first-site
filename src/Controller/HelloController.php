@@ -23,16 +23,20 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
+use Symfony\Component\Finder\Finder;
+
 class HelloController extends AbstractController
 {
     #[Route('/hello', name:'hello')]
-    public function index(Request $request, EntityManagerInterface $em)
+    public function index(Request $request)
     {
-        $repository = $em->getRepository(Person::class);
-        $data = $repository->findall();
+        $finder = new Finder();
+        $finder->files()->in(__DIR__);
+
         return $this->render('hello/index.html.twig', [
             'title' => 'Hello',
-            'data' => $data,
+            'message' => __DIR__,
+            'finder' => $finder,
         ]);
     }
 
