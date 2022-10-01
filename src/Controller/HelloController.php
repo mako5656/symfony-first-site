@@ -25,23 +25,31 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 use Symfony\Component\Finder\Finder;
 
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+
 class HelloController extends AbstractController
 {
     #[Route('/hello', name:'hello')]
     public function index(Request $request)
     {
-        $finder = new Finder();
-        $finder->files()->path('var/log')->name('dev.log')->in('../');
-        $file = null;
-        foreach($finder as $item) {
-            $file = $item;
-            break;
+        $fileSystem = new Filesystem();
+        $temp = __DIR__ . '/temp';
+
+        try {
+            if (!$fileSystem->exists($temp)) {
+                $fileSystem->mkdir($temp);
+            }
+            $fileSystem->appendToFile($temp . '/temp.txt', "WRITE TEXT!!!   ");
+            $fileSystem->appendToFile($temp . '/temp.txt', date("Y-m-d H:i:s"));
+            $fileSystem->appendToFile($temp . '/temp.txt', "\n");
+        } catch (IOExceptionInterface $e) {
+            echo "ERROR! ". $e->getPath();
         }
 
         return $this->render('hello/index.html.twig', [
             'title' => 'Hello',
             'message' => 'get file/folder',
-            'file' => $file,
         ]);
     }
 
