@@ -31,7 +31,7 @@ class HelloController extends AbstractController
     public function index(Request $request)
     {
         $finder = new Finder();
-        $finder->files()->depth('<=1')->in('../templates/');
+        $finder->files()->depth('<=2')->name('*.yaml')->in('../../');
 
         return $this->render('hello/index.html.twig', [
             'title' => 'Hello',
