@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Person;
+use App\Form\HelloType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,23 +34,20 @@ class HelloController extends AbstractController
     #[Route('/hello', name:'hello')]
     public function index(Request $request)
     {
-        $fileSystem = new Filesystem();
-        $temp = __DIR__ . '/temp';
+        $form = $this->createForm(HelloType::class, null);
+        $form->handleRequest($request);
 
-        try {
-            if (!$fileSystem->exists($temp)) {
-                $fileSystem->mkdir($temp);
-            }
-            $fileSystem->appendToFile($temp . '/temp.txt', "WRITE TEXT!!!   ");
-            $fileSystem->appendToFile($temp . '/temp.txt', date("Y-m-d H:i:s"));
-            $fileSystem->appendToFile($temp . '/temp.txt', "\n");
-        } catch (IOExceptionInterface $e) {
-            echo "ERROR! ". $e->getPath();
+        if ($request->getMethod() == 'POST'){
+            $this->addFlash('info.mail', 'mail:' . $form->getData()['mail']);
+            $msg = 'Hello, ' . $form->getData()['name'] . '!!';
+        } else {
+            $msg = 'Send Form';
         }
 
         return $this->render('hello/index.html.twig', [
             'title' => 'Hello',
-            'message' => 'get file/folder',
+            'message' => $msg,
+            'form' => $form->createView(),
         ]);
     }
 

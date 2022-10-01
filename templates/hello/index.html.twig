@@ -4,6 +4,21 @@
 {% block title %}{{title}}{% endblock %}
 
 {% block body %}
+    <style>
+        .flash-notice {
+            color:red;
+            font-size:16pt;
+            font-weight:bold;
+        }
+    </style>
     <h2>Hello</h2>
+    {% for message in app.flashes('info.mail') %}
+        <div class="flash-notice">
+            {{ message }}
+        </div>
+    {% endfor %}
     <p>{{ message }}</p>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
 {% endblock %}
