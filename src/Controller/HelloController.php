@@ -31,9 +31,8 @@ class HelloController extends AbstractController
     public function index(Request $request)
     {
         $finder = new Finder();
-        $finder->directories()->in('../src/');
-
-
+        $finder->files()->in(['../src/Controller', '../src/Entity/', '../src/Repository/']);
+        
         return $this->render('hello/index.html.twig', [
             'title' => 'Hello',
             'message' => 'get file/folder',
