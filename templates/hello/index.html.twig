@@ -6,9 +6,5 @@
 {% block body %}
     <h2>Hello</h2>
     <p>{{ message }}</p>
-    <ul>
-        {% for file in finder %}
-            <li>{{file.filename}}</li>
-        {% endfor %}
-    </ul>
+    <pre>{{ file.contents }}</pre>
 {% endblock %}
