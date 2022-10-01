@@ -31,11 +31,12 @@ class HelloController extends AbstractController
     public function index(Request $request)
     {
         $finder = new Finder();
-        $finder->files()->in(__DIR__);
+        $finder->directories()->in('../src/');
+
 
         return $this->render('hello/index.html.twig', [
             'title' => 'Hello',
-            'message' => __DIR__,
+            'message' => 'get file/folder',
             'finder' => $finder,
         ]);
     }
