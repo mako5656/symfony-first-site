@@ -4,8 +4,10 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity("username")]
 class User
 {
     #[ORM\Id]
@@ -76,5 +78,54 @@ class User
         $this->isActivated = $isActivated;
 
         return $this;
+    }
+
+    public function __construct()
+    {
+        $this->isActive = true;
+    }
+
+
+    public function getSalt()
+    {
+        return null;
+    }
+
+
+    public function getRoles()
+    {
+        if ($this->username == 'admin') {
+            return array('ROLE_ADMIN');
+        } else {
+            return array('ROLE_USER');
+        }
+
+    }
+
+
+    public function eraseCredentials()
+    {
+    }
+
+
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+            $this->username,
+            $this->password,
+            $this->isActive,
+        ));
+    }
+
+
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->username,
+            $this->password,
+            $this->isActive,
+            ) = unserialize($serialized, array('allowed_classes' => false));
     }
 }
