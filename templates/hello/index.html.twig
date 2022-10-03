@@ -12,11 +12,13 @@
         }
     </style>
     <h2>Hello</h2>
-    {% for message in app.flashes('info.mail') %}
-        <div class="flash-notice">
-            {{ message }}
-        </div>
-    {% endfor %}
+    <ol>
+        {% for message in bag.peek('info.mail') %}
+            <div class="flash-notice">
+                <li>{{ message.name }}</li>
+            </div>
+        {% endfor %}
+    </ol>
     <p>{{ message }}</p>
     {{ form_start(form) }}
     {{ form_widget(form) }}

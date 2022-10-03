@@ -7,6 +7,7 @@ use App\Form\HelloType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -32,7 +33,7 @@ use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 class HelloController extends AbstractController
 {
     #[Route('/hello', name:'hello')]
-    public function index(Request $request)
+    public function index(Request $request, SessionInterface $session)
     {
         $formobj = new HelloForm();
         $form = $this->createForm(HelloType::class, $formobj);
@@ -40,15 +41,15 @@ class HelloController extends AbstractController
 
         if ($request->getMethod() == 'POST'){
             $formobj = $form->getData();
-            $this->addFlash('info.mail', $formobj);
+            $session->getFlashBag()->add('info.mail', $formobj);
             $msg = 'Hello, ' . $formobj->getName() . '!!';
         } else {
             $msg = 'Send Form';
         }
-
         return $this->render('hello/index.html.twig', [
             'title' => 'Hello',
             'message' => $msg,
+            'bag' => $session->getFlashBag(),
             'form' => $form->createView(),
         ]);
     }
@@ -173,6 +174,13 @@ class HelloController extends AbstractController
                 'form' => $form->createView(),
             ]);
         }
+    }
+
+    #[Route('/clear', name:'clear')]
+    public function clear(Request $request, SessionInterface $session)
+    {
+        $session->getFlashBag()->clear();
+        return $this->redirect('/hello');
     }
 }
 
