@@ -4,27 +4,28 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity("username")]
-class User
+class User implements UserInterface, \Serializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $username = null;
 
     #[ORM\Column(length: 255)]
     private ?string $password = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'string',length: 255)]
     private ?string $email = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'boolean')]
     private ?bool $isActivated = null;
 
     public function getId(): ?int
@@ -85,12 +86,10 @@ class User
         $this->isActive = true;
     }
 
-
     public function getSalt()
     {
         return null;
     }
-
 
     public function getRoles()
     {
@@ -102,11 +101,9 @@ class User
 
     }
 
-
     public function eraseCredentials()
     {
     }
-
 
     public function serialize()
     {
@@ -117,7 +114,6 @@ class User
             $this->isActive,
         ));
     }
-
 
     public function unserialize($serialized)
     {
