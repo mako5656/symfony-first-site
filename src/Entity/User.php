@@ -6,27 +6,28 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity("username")]
-class User implements UserInterface, \Serializable
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private ?int $id = null;
+    private $id;
 
     #[ORM\Column(length: 255, unique: true)]
-    private ?string $username = null;
+    private $username;
 
     #[ORM\Column(length: 255)]
-    private ?string $password = null;
+    private $password;
 
     #[ORM\Column(type: 'string',length: 255)]
-    private ?string $email = null;
+    private $email;
 
     #[ORM\Column(type: 'boolean')]
-    private ?bool $isActivated = null;
+    private $isActivated;
 
     public function getId(): ?int
     {
@@ -91,14 +92,13 @@ class User implements UserInterface, \Serializable
         return null;
     }
 
-    public function getRoles()
+    public function getRoles(): array
     {
         if ($this->username == 'admin') {
-            return array('ROLE_ADMIN');
+            return ['ROLE_ADMIN'];
         } else {
-            return array('ROLE_USER');
+            return ['ROLE_USER'];
         }
-
     }
 
     public function eraseCredentials()
@@ -124,4 +124,9 @@ class User implements UserInterface, \Serializable
             $this->isActive,
             ) = unserialize($serialized, array('allowed_classes' => false));
     }
+
+    public function getUserIdentifier(): string
+    {
+    }
+
 }
