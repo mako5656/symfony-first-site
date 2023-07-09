@@ -37,6 +37,12 @@ php bin/console make:controller
 php bin/console make:entity
 ```
 
+# データベースの作成
+
+```
+php bin/console doctrine:database:create
+```
+
 # マイグレーションファイルの作成
 
 ```
@@ -47,6 +53,24 @@ php bin/console make:migration
 
 ```
 php bin/console doctrine:migrations:migrate
+```
+
+# エンティティとDBを同期する、差分を確認する
+
+```
+php bin/console doctrine:schema:update
+```
+
+# エンティティとDBが同期されているかを調べる
+
+```
+bin/console doctrine:schema:validate
+```
+
+# キャッシュを削除する
+
+```
+bin/console cache:clear
 ```
 
 # ログ出力場所
